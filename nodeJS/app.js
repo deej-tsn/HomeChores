@@ -22,6 +22,13 @@ app.get("/", function(req, res){
     });
 });
 
+app.get("/form", function(req, res){
+    res.render("form", {
+        title: 'Form'
+    });
+});
+
+
 app.get("/people", async(req, res) => {
     try{
         //await
