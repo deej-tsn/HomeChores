@@ -1,0 +1,12 @@
+extends layout
+
+block title 
+    title #{title}
+
+block content 
+    each person in people
+        ol
+            li #{person.first_name} 
+            li #{person.second_name}
+            li #{person.email}
+            li #{person.point}

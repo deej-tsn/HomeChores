@@ -1,18 +1,36 @@
 const express = require("express");
-const app = express();
 const pool = require("./database");
+const path = require("path");
+
+
+// INIT APP
+const app = express();
+
 
 app.use(express.json()); // => req.body
 
+// LOAD VIEW ENGINE
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 // ROUTES//
 
 //get all people
 
+app.get("/", function(req, res){
+    res.render("index", {
+        title: 'Hello'
+    });
+});
+
 app.get("/people", async(req, res) => {
     try{
         //await
-        const allPeople = await pool.query("SELECT * FROM people");
-        res.json(allPeople.rows);
+        const allPeople = await pool.query("SELECT * FROM people ORDER BY id");
+        //res.json(allPeople.rows);
+        res.render("people", {
+            title: 'People',
+            people: allPeople.rows
+        })
     }catch (err){
         console.log(err.message);
     }
@@ -60,7 +78,7 @@ app.put("/people/:id", async(req, res) => {
 })
 
 // delete a person by ID
-app.put("/people/:id", async(req, res) => {
+app.delete("/people/:id", async(req, res) => {
     try{
         //await
         const {id} = req.params;
