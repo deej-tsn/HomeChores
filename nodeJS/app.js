@@ -7,7 +7,7 @@ const path = require("path");
 const app = express();
 
 
-app.use(express.json()); // => req.body
+app.use(express.static(path.join(__dirname, 'public'))); // => req.body
 
 // LOAD VIEW ENGINE
 app.set('views', path.join(__dirname, 'views'));
