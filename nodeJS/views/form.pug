@@ -8,14 +8,22 @@ block content
       for error in errors
         li= error.msg
 
-  form(action="." method="POST" class="form-registration")
-    label(for="name") Name:
+  form(action="/submit-form" method="GET" class="form-registration")
+    label(for="first_name") First Name:
     input(
       type="text"
-      id="name"
-      name="name"
+      id="first_name"
+      name="first_name"
       class="form-control"
-      value=data.name
+      required
+    )
+    label(for="second_name") Second Name:
+    input(
+      type="text"
+      id="second_name"
+      name="second_name"
+      class="form-control"
+      required 
     )
 
     label(for="email") Email:
@@ -24,9 +32,8 @@ block content
       id="email"
       name="email"
       class="form-control"
-      value=data.email
+      required
     )
-
     input(
       type="submit"
       value="Submit"

@@ -1,13 +1,14 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const pool = require("./database");
 const path = require("path");
-
 
 // INIT APP
 const app = express();
 
 
 app.use(express.static(path.join(__dirname, 'public'))); // => req.body
+app.use(bodyParser.urlencoded({extended : false}));
 
 // LOAD VIEW ENGINE
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +27,15 @@ app.get("/form", function(req, res){
     res.render("form", {
         title: 'Form'
     });
+});
+
+app.get("/submit-form", function(req, res){
+    return res.send(req.query);
+});
+
+
+app.post("/submit-form", function(req, res){
+    return res.send(req.body);
 });
 
 
@@ -55,15 +65,18 @@ app.get("/people/:id", async (req,res) => {
     }
 })
 
+
+
 //add a person
 
-app.post("/people", async(req, res) => {
+app.post("/form_djdjd", async(req, res) => {
     try{
         //await
-        const {first_name, secondName, Email } = req.body;
+        console.log(req.body);
+        const {first_name, second_name, Email } = req.body;
         const newPerson = await pool.query(
             "INSERT INTO people (first_name, second_name, email) VALUES ($1, $2, $3)",
-            [first_name, secondName, Email]
+            [first_name, second_name, Email]
             );
         res.json(newPerson);
     }catch (err){
