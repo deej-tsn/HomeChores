@@ -1,0 +1,28 @@
+extends layout
+
+block content
+    -data = data || {}
+
+    if errors
+        ul.my-errors
+            for error in errors
+                li= error.msg
+
+    form(action="/form_chore" method="POST" class="form-registration")
+        label(for="email") Email:
+        input(
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            required
+        )
+        label(for="chores") Chores :
+        select(name="chore" id="chores")
+            for chore in chores 
+                option(value=chore.chore_id) #{chore.chore_name}
+        input(
+            type="submit"
+            value="Submit"
+            class="btn btn-lg btn-primary btn-block"
+        )

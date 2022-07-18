@@ -8,7 +8,7 @@ block content
       for error in errors
         li= error.msg
 
-  form(action="/submit-form" method="GET" class="form-registration")
+  form(action="/form" method="POST" class="form-registration")
     label(for="first_name") First Name:
     input(
       type="text"
