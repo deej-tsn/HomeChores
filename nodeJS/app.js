@@ -9,6 +9,7 @@ const path = require("path");
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
+const methodOverride = require("method-override");
 
 const initializePassport = require("./passport-config");
 initializePassport(passport, getUserByEmail, getUserById, hashedPassword);
@@ -29,6 +30,8 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(methodOverride("_method"));
+
 
 async function getUserByEmail(email){
     try {
@@ -76,78 +79,36 @@ app.set('view engine', 'pug');
 
 //get all people
 
-app.get("/", function(req, res){
+app.get("/", checkAuthenicated , async (req, res) =>{
+    const user = await req.user;
     res.render("Home", {
         title: "Home",
-        name: req.user.first_name
+        name: user.first_name
     });
 });
 
-app.get("/register", function(req, res){
-    res.render("form", {
+app.get("/register", checkNotAuthenicated ,function(req, res){
+    res.render("register", {
         title: 'Register'
     });
 });
 
-app.get("/login", function(req, res){
+app.get("/login", checkNotAuthenicated ,function(req, res){
     res.render("login", {
         title: "Login"
     })
 });
 
-app.post("/login", passport.authenticate('local', {
+app.post("/login", checkNotAuthenicated,passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true
 }));
 
-app.get("/submit-form", function(req, res){
-    return res.send(req.query);
-});
-
-app.get("/form_successful", function(req, res){
-    res.render("form_successful", {
-        title: 'Successful'
-    });
-});
-
-
-app.post("/submit-form", function(req, res){
-    return res.send(req.body);
-});
-
-
-app.get("/people", async(req, res) => {
-    try{
-        //await
-        const allPeople = await pool.query("SELECT * FROM people ORDER BY id");
-        //res.json(allPeople.rows);
-        res.render("people", {
-            title: 'People',
-            people: allPeople.rows
-        })
-    }catch (err){
-        console.log(err.message);
-    }
-})
-
-//get a person by ID
-
-app.get("/people/:id", async (req,res) => {
-    const {id} = req.params;
-    try {
-        const getPerson = await pool.query("SELECT * FROM people WHERE id = ($1)", [id]);
-        res.json(getPerson.rows);
-    } catch (err) {
-        console.error(err.message);
-    }
-})
-
-
 
 //add a person
 
-app.post("/form", async(req, res) => {
+app.post("/register", async(req, res) => {
     try{
         //await
         console.log(req.body);
@@ -222,6 +183,29 @@ app.delete("/people/:id", async(req, res) => {
         console.log(err.message);
     }
 })
+
+function checkAuthenicated(req, res, next){
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+}
+
+function checkNotAuthenicated(req, res, next){
+    if (req.isAuthenticated()){
+        return res.redirect("/");
+    }
+    next();
+}
+
+app.delete('/logout', function (req, res, next) {
+    req.logOut(function (err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect('/login');
+    });
+  });
 
 app.listen(3000, () => {
     console.log("server is listening on port 3000");
