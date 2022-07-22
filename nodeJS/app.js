@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
 
+// IMPORTS 
 const express = require("express");
 const bodyParser = require("body-parser");
 const pool = require("./database");
@@ -10,28 +11,26 @@ const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
 const methodOverride = require("method-override");
-
 const initializePassport = require("./passport-config");
 initializePassport(passport, getUserByEmail, getUserById, hashedPassword);
 
 // INIT APP
 const app = express();
 
+// CONFIG APP
 app.use(express.static(path.join(__dirname, 'public'))); // => req.body
 app.use(bodyParser.urlencoded({extended : false}));
-
 app.use(flash());
-
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride("_method"));
 
+// EXTRA FUNCTIONS
 
 async function getUserByEmail(email){
     try {
@@ -40,6 +39,17 @@ async function getUserByEmail(email){
             return null;
         }
         return getPerson.rows[0];
+    } catch (error) {
+        console.log(error);
+    }
+    return user;
+}
+
+async function getUserById(id){
+    user = null;
+    try {
+        const getPerson = await pool.query("SELECT * FROM people WHERE id = ($1)", [id]);
+        user = getPerson.rows[0];
     } catch (error) {
         console.log(error);
     }
@@ -61,23 +71,14 @@ async function hashedPassword(email, password){
     }
 }
 
-async function getUserById(id){
-    user = null;
-    try {
-        const getPerson = await pool.query("SELECT * FROM people WHERE id = ($1)", [id]);
-        user = getPerson.rows[0];
-    } catch (error) {
-        console.log(error);
-    }
-    return user;
-}
-
 // LOAD VIEW ENGINE
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+
 // ROUTES//
 
-//get all people
+// HOME
 
 app.get("/", checkAuthenicated , async (req, res) =>{
     const user = await req.user;
@@ -87,26 +88,13 @@ app.get("/", checkAuthenicated , async (req, res) =>{
     });
 });
 
+// REGISTER
+
 app.get("/register", checkNotAuthenicated ,function(req, res){
     res.render("register", {
         title: 'Register'
     });
 });
-
-app.get("/login", checkNotAuthenicated ,function(req, res){
-    res.render("login", {
-        title: "Login"
-    })
-});
-
-app.post("/login", checkNotAuthenicated,passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-}));
-
-
-//add a person
 
 app.post("/register", async(req, res) => {
     try{
@@ -126,6 +114,35 @@ app.post("/register", async(req, res) => {
         })
     }
 });
+
+// LOGIN 
+
+app.get("/login", checkNotAuthenicated ,function(req, res){
+    res.render("login", {
+        title: "Login"
+    })
+});
+
+app.post("/login", checkNotAuthenicated,passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+}));
+
+// LOGOUT 
+
+app.delete('/logout', function (req, res, next) {
+    req.logOut(function (err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect('/login');
+    });
+  });
+
+// PENDING //
+
+// ADD FORM
 
 app.get("/form_chore", async(req,res) => {
     const chores = await pool.query("SELECT chore_name, chore_id FROM chores");
@@ -159,19 +176,6 @@ app.post("/form_chore", async(req,res) => {
     
 });
 
-//update a person points
-app.put("/people/:id", async(req, res) => {
-    try{
-        //await
-        const {id} = req.params;
-        const {newPoints} = req.body;
-        const changePerson = await pool.query("UPDATE people SET point = ($1) WHERE id = ($2)", [newPoints, id]);
-        res.json(id + " was updated with new points value "+ newPoints);
-    }catch (err){
-        console.log(err.message);
-    }
-})
-
 // delete a person by ID
 app.delete("/people/:id", async(req, res) => {
     try{
@@ -183,6 +187,8 @@ app.delete("/people/:id", async(req, res) => {
         console.log(err.message);
     }
 })
+
+// Check if Logged In or Not
 
 function checkAuthenicated(req, res, next){
     if (req.isAuthenticated()) {
@@ -197,15 +203,6 @@ function checkNotAuthenicated(req, res, next){
     }
     next();
 }
-
-app.delete('/logout', function (req, res, next) {
-    req.logOut(function (err) {
-      if (err) {
-        return next(err);
-      }
-      res.redirect('/login');
-    });
-  });
 
 app.listen(3000, () => {
     console.log("server is listening on port 3000");
