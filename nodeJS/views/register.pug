@@ -1,14 +1,6 @@
 extends layout
 
 block content
-  -data = data || {}
-
-  if errors
-    ul.my-errors
-      for error in errors
-        li= error.msg
-
-    
   form(action="#" method="POST" class="form-registration")
     label(for="first_name") First Name:
     input(
@@ -48,3 +40,11 @@ block content
       value="Submit"
       class="btn btn-lg btn-primary btn-block"
     )
+
+    div(class= 'container')
+        div(class='row')
+            div(class='col text-center')
+                a(class='btn btn-info' href="/login") Login 
+                if locals.messages.error
+                    p= messages.error
+                    

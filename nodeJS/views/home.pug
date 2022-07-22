@@ -6,5 +6,7 @@ block title
 block content
     h1 Hi
     p #{name}
+    form(action="/logout?_method=DELETE" method="POST")
+        button(type="submit") Log Out
     a(href="/login") Login 
     a(href="/register") Register 
