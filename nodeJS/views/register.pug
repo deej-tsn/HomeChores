@@ -3,6 +3,10 @@ extends layout
 block title
   title #{title}
 
+block header
+    h1 #{title}
+
+
 block content
   form(action="#" method="POST" class="form-registration")
     label(for="first_name") First Name:

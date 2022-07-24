@@ -1,5 +1,13 @@
 extends layout
 
+block title
+    title #{title}
+
+
+block header
+    h1 #{title}
+
+
 block content
     - var i = 1;
     div(class= 'container')
