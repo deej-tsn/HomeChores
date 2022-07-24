@@ -33,6 +33,7 @@ app.use(methodOverride("_method"));
 // EXTRA FUNCTIONS
 
 async function getUserByEmail(email){
+    user = null;
     try {
         const getPerson = await pool.query("SELECT * FROM people WHERE email = ($1)", [email]);
         if (getPerson.rows[0] == undefined) {
@@ -142,21 +143,34 @@ app.delete('/logout', function (req, res, next) {
 
   // View Chores
 
-app.get("/viewChores", checkAuthenicated, async(req,res) =>{
+app.get("/viewChoresDone", checkAuthenicated, async(req,res) =>{
     const chores = await pool.query("SELECT first_name, second_name,chore_name, TO_CHAR(date_time, 'DD/MM/YYYY') AS date, TO_CHAR(date_time, 'HH24:MI') AS time FROM people INNER JOIN person_chore ON person_chore.person_id = people.id INNER JOIN chores ON chores.chore_id = person_chore.chore_id ORDER BY date_time DESC");
-    console.log(chores.rows);
-    res.render("viewChores",{
+    res.render("viewChoresDone",{
         title: "Chores",
         chores: chores.rows
     }
     );
 });
 
-app.get("/viewPoints", checkAuthenicated, async(req,res) =>{
+// View Points
+
+app.get("/viewPointsEarned", checkAuthenicated, async(req,res) =>{
     const points = await pool.query("SELECT first_name, second_name, point FROM people ORDER BY point DESC");
-    res.render("viewPoints",{
+    res.render("viewPointsEarned",{
         title: "Points",
         chores: points.rows
+    }
+    );
+});
+
+// View Chores
+
+app.get("/viewChoreInfo", checkAuthenicated, async(req,res) =>{
+    const chores = await pool.query("SELECT chore_name, chore_time, location, chore_points FROM chores");
+    console.log(chores.rows);
+    res.render("viewChoreInfo",{
+        title: "Chores",
+        chores: chores.rows
     }
     );
 });

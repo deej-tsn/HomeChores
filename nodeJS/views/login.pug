@@ -3,6 +3,10 @@ extends layout
 block title
     title #{title}
 
+block header
+    h1 #{title}
+
+
 block content
     form.form-registration(action="/login" method="POST")
         label(for="email") Email:

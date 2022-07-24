@@ -1,0 +1,28 @@
+extends layout
+
+block title
+    title #{title}
+
+block header
+    h1 #{title}
+
+block content
+    - var i = 1;
+    div(class= 'container')
+            div(class='row')
+                div(class='col text-center')
+                    table.table.table-dark 
+                        thead
+                            tr
+                                th(scope="col") Chore
+                                th(scope="col") Times 
+                                th(scope="col") Location
+                                th(scope="col") Points
+                        tbody 
+                            each row in chores
+                                tr
+                                    td #{row.chore_name}
+                                    td #{row.chore_time}
+                                    td #{row.location}
+                                    td #{row.chore_points}
+
