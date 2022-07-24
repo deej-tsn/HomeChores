@@ -140,40 +140,51 @@ app.delete('/logout', function (req, res, next) {
     });
   });
 
-// PENDING //
+  // View Chores
 
-// ADD FORM
-
-app.get("/form_chore", async(req,res) => {
-    const chores = await pool.query("SELECT chore_name, chore_id FROM chores");
-    res.render("form_chore",{
-        title: "Chorm Submission",
+app.get("/viewChores", checkAuthenicated, async(req,res) =>{
+    const chores = await pool.query("SELECT first_name, second_name,chore_name, TO_CHAR(date_time, 'DD/MM/YYYY') AS date, TO_CHAR(date_time, 'HH24:MI') AS time FROM people INNER JOIN person_chore ON person_chore.person_id = people.id INNER JOIN chores ON chores.chore_id = person_chore.chore_id ORDER BY date_time DESC");
+    console.log(chores.rows);
+    res.render("viewChores",{
+        title: "Chores",
         chores: chores.rows
     }
     );
 });
 
-app.post("/form_chore", async(req,res) => {
-    const {email, chore_id} = req.body;
+app.get("/viewPoints", checkAuthenicated, async(req,res) =>{
+    const points = await pool.query("SELECT first_name, second_name, point FROM people ORDER BY point DESC");
+    res.render("viewPoints",{
+        title: "Points",
+        chores: points.rows
+    }
+    );
+});
+
+
+// ADD a chore a person has done
+
+app.get("/add_person_chore", checkAuthenicated, async(req,res) => {
+    const chores = await pool.query("SELECT chore_name, chore_id FROM chores");
+    res.render("addChore",{
+        title: "Add Chore",
+        chores: chores.rows
+    }
+    );
+});
+
+app.post("/add_person_chore", checkAuthenicated, async(req,res) => {
+    const user = await req.user;
+    const {chore} = req.body;
     try {
-        const personID =  await pool.query(
-            "SELECT id FROM people WHERE email = ($1)",
-            [email]
-            );
         const sendRequest = await pool.query(
             "INSERT INTO person_chore (person_id, chore_id) VALUES ($1, $2)",
-            [personID.row, chore_id]
+            [user.id, chore]
             );
-        res.redirect("/form_successful");
+        res.redirect("/");
     } catch (error) {
-        res.render("form_failure",
-        {
-            title: "Failure",
-            error: error
-        })
-        
+        console.log(error);
     }
-    
 });
 
 // delete a person by ID

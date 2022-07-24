@@ -1,0 +1,29 @@
+extends layout
+
+block title
+    title #{title}
+
+block content
+    - var i = 1;
+    div(class= 'container')
+            div(class='row')
+                div(class='col text-center')
+                    table.table.table-dark 
+                        thead
+                            tr
+                                th(scope="col") #
+                                th(scope="col") First Name
+                                th(scope="col") Second Name 
+                                th(scope="col") Chore
+                                th(scope="col") Date
+                                th(scope="col") Time 
+                        tbody 
+                            each row in chores
+                                tr
+                                    th(scope="row")= i++
+                                    td #{row.first_name}
+                                    td #{row.second_name}
+                                    td #{row.chore_name}
+                                    td #{row.date}
+                                    td #{row.time}
+

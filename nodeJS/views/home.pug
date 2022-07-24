@@ -4,9 +4,14 @@ block title
     title #{title}
 
 block content
-    h1 Hi
-    p #{name}
-    form(action="/logout?_method=DELETE" method="POST")
-        button(type="submit") Log Out
-    a(href="/login") Login 
-    a(href="/register") Register 
+    div(class= 'container')
+        div(class='row')
+            div(class='col text-center')
+                h1 Hi #{name}
+                a.btn(href="/add_person_chore") Add Chore
+                a.btn(href="/viewChores") View Chores
+                a.btn(href="/viewPoints") View Points 
+                form.btn.form-registration(action="/logout?_method=DELETE" method="POST")
+                    button.btn.btn-lg.btn-primary.btn-block(type="submit") Log Out
+                
+

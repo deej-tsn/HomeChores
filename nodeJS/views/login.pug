@@ -4,7 +4,7 @@ block title
     title #{title}
 
 block content
-    form(action="/login" method="POST" class="form-registration")
+    form.form-registration(action="/login" method="POST")
         label(for="email") Email:
         input(
         type="email"
@@ -33,3 +33,4 @@ block content
                 if locals.messages.error
                     p= messages.error
                     
+    
