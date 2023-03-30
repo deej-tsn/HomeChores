@@ -3,9 +3,6 @@ extends layout
 block title 
     title #{title}
 
-block header
-    h1 #{title}
-
 block content
     div.container
         div.row
@@ -20,5 +17,7 @@ block content
             .col.text-center
                 form.btn.form-registration(action="/logout?_method=DELETE" method="POST")
                     button.btn.btn-lg.btn-primary.btn-block(type="submit") Log Out
+    .nav_bar
+        
                 
 

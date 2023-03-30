@@ -3,34 +3,39 @@ extends layout
 block title
     title #{title}
 
+
 block content
-    form.form-registration(action="/login" method="POST")
-        label(for="email") Email:
-        input(
-        type="email"
-        id="email"
-        name="email"
-        class="form-control"
-        required
-        )
-        label(for="password") Password
-        input(
-        type="password"
-        id="password"
-        name="password"
-        class="form-control"
-        required
-        )
-        input(
-        type="submit"
-        value="Submit"
-        class="btn btn-lg btn-primary btn-block"
-        )
-    div(class= 'container')
-        div(class='row')
-            div(class='col text-center')
-                a(class='btn btn-info' href="/register") Register 
-                if locals.messages.error
-                    p= messages.error
-                    
-    
+    div.title_div
+        h1 Chorestopia
+    div.content_div
+        div.form
+            form.form-registration(action="/login" method="POST")
+                label(for="email") Email:
+                input(
+                type="email"
+                id="email"
+                name="email"
+                class="form-control"
+                required
+                )
+                label(for="password") Password
+                input(
+                type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                required
+                )
+                input(
+                type="submit"
+                value="Submit"
+                class="btn btn-lg btn-primary btn-block"
+                )
+            div(class= 'container')
+                div(class='row')
+                    div(class='col text-center')
+                        a(class='btn btn-info' href="/register") Register 
+                        if locals.messages.error
+                            p= messages.error
+                            
+            
