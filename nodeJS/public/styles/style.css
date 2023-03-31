@@ -5,6 +5,7 @@ body {
     flex-direction: column;
     width: 100vw;
     height: 100vh;
+    overflow-x: hidden;
   }
 .listing-reg h1 {
   text-align: center;
@@ -12,6 +13,7 @@ body {
 }
 
 /* css for login and register*/
+
 .title_div {
   background-color: #fff;
   font-family: "Bebas Neue";
@@ -39,8 +41,8 @@ body {
   justify-content: center;
 }
 
+
 .form{
-  
   background-color:#fff;
   padding: 10px;
   border-radius: 25px;
@@ -82,6 +84,65 @@ body {
   font-weight: bold;
 }
 
+/* Styles for home*/
+
+.nav_bar {
+  background-color: #2052d2;
+  display: flex;
+  width: 100%;
+  color: #fff;
+  font-size: 2rem;
+  float: right;
+}
+
+.logout_form{
+  margin-left: auto;
+  display: inline;
+  margin-bottom: 0;
+  padding: 10px;
+}
+
+.home_content{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.links i{
+  font-size: 120px;
+  padding: 5px;
+  margin: auto;
+  color: #2052d2;
+}
+
+.links {
+  display: flex;
+  width: 100%;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: aliceblue;
+  padding: 20px;
+  margin: 5px;
+  border-radius: 25px;
+  font-size: 1.5rem;
+}
+
+.link:hover{
+  background-color: rgb(126, 188, 243);
+  
+}
+
+.link:hover i{
+  color: white;
+}
+
+
+
 /* Styles for listing table */
 .listing-table {
   width: 100%;
@@ -98,4 +159,26 @@ body {
 .listing-table td:first-child,
 .listing-table th:first-child {
   border-right: 1px solid #666;
+}
+.curved th:first-of-type{
+  border-top-left-radius: 10px;
+}
+
+.curved th:last-of-type {
+  border-top-right-radius: 10px;
+}
+.curved tr:last-of-type td:first-of-type {
+  border-bottom-left-radius: 10px;
+}
+.curved tr:last-of-type td:last-of-type {
+  border-bottom-right-radius: 10px;
+}
+
+
+.padding {
+  padding: 10px;
+}
+
+.margin {
+  margin: 10px;
 }

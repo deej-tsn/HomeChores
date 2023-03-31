@@ -7,17 +7,18 @@ block title
 
 block content
     - var i = 1;
-    div(class= 'container')
-            div(class='row')
-                div(class='col text-center')
-                    table.table.table-dark 
+    .content_div
+        .container
+            .row
+                .col.text-center
+                    table.table.table-primary.curved
                         thead
-                            tr
+                            tr.rounded
                                 th(scope="col") #
                                 th(scope="col") First Name
                                 th(scope="col") Second Name 
                                 th(scope="col") Points
-                        tbody 
+                        tbody
                             each row in chores
                                 tr
                                     th(scope="row")= i++

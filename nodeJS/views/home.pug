@@ -4,20 +4,25 @@ block title
     title #{title}
 
 block content
-    div.container
-        div.row
-            div.col.text-center
-                h1 Hi #{name}
-        .row
-            .col.text-center
-                a.btn(href="/add_person_chore") Add Chore
-                a.btn(href="/viewChores") View Chores
-                a.btn(href="/viewPoints") View Points 
-        .row
-            .col.text-center
-                form.btn.form-registration(action="/logout?_method=DELETE" method="POST")
-                    button.btn.btn-lg.btn-primary.btn-block(type="submit") Log Out
     .nav_bar
-        
-                
+            
+        form.logout_form(action="/logout?_method=DELETE" method="POST")
+            button.btn(type="submit") Log Out
+    br
+    .home_content 
+        .links
+            .container
+                .row
+                    .col-md-4(onclick="location.href='/add_person_chore';" style="cursor: pointer;")
+                        .link.one
+                            i.fa-solid.fa-circle-plus
+                            h3 Add Chore
+                    .col-md-4(onclick="location.href='/viewChores';" style="cursor: pointer;")
+                        .link.two
+                            i.fa-solid.fa-calendar-days
+                            h3 View Chores
+                    .col-md-4(onclick="location.href='/viewPoints';" style="cursor: pointer;")
+                        .link.three
+                            i.fa-solid.fa-circle-up
+                            h3 View Points
 
